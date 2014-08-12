@@ -29,7 +29,7 @@ public class TextileBuilder {
 		Map<String,GammaVertex> nameToGammaVertex = new HashMap<String,GammaVertex>();
 		
 		for(GEdge ge : gEdges) {
-			GammaVertex gav = new GammaVertex(ge.getSourceName(),ge.getTargetName(),ge.getName());
+			GammaVertex gav = new GammaVertex(g.getEdgeSource(ge),g.getEdgeTarget(ge),ge.getName());
 			gammaT.addVertex(gav);
 			nameToGammaVertex.put(ge.getName(),gav);
 		}
@@ -50,8 +50,8 @@ public class TextileBuilder {
 		}
 		
 		for(GammaVertex gammav : gammaVertices) {
-			GVertex sv = nameToGVertex.get(gammav.getPVHom());
-			GVertex tv = nameToGVertex.get(gammav.getQVHom());
+			GVertex sv = nameToGVertex.get(gammav.getPVHomName());
+			GVertex tv = nameToGVertex.get(gammav.getQVHomName());
 			GEdge e = new GEdge(sv.getName(),tv.getName(),gammav.getName());
 			gT.addEdge(sv,tv,e);
 		}

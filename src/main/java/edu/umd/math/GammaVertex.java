@@ -2,19 +2,27 @@ package edu.umd.math;
 
 public class GammaVertex extends Vertex{
 
-	private String pv;
-	private String qv;
+	private GVertex pv;
+	private GVertex qv;
 	
 	
-	public String getPVHom() {
+	public String getPVHomName() {
+		return pv.getName();
+	}
+	
+	public String getQVHomName() {
+		return qv.getName();
+	}
+	
+	public GVertex getPVHom() {
 		return pv;
 	}
 	
-	public String getQVHom() {
+	public GVertex getQVHom() {
 		return qv;
 	}
 	
-	public GammaVertex(String p, String q, String n) {
+	public GammaVertex(GVertex p, GVertex q, String n) {
 		pv = p;
 		qv = q;
 		name = n;
