@@ -1,6 +1,7 @@
 package edu.umd.math;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -89,7 +90,71 @@ public class TextileBuilder {
 		return new Textile(inverseGamma,g);
 	}
 	
-	public static Textile createProductTextile(Textile s, Textile t) {
+	public static Textile createProductTextile(Textile t, Textile s) throws Exception {
+		
+		DirectedPseudograph<GammaVertex,GammaEdge> tGamma = t.getGammaGraph();
+		DirectedPseudograph<GVertex,GEdge> tG = (DirectedPseudograph<GVertex, GEdge>) t.getGGraph().clone();
+
+		DirectedPseudograph<GammaVertex,GammaEdge> sGamma = s.getGammaGraph();		
+		DirectedPseudograph<GVertex,GEdge> sG = s.getGGraph();		
+
+		Set<GammaEdge> sGammaEdges = sGamma.edgeSet();
+		Set<GammaVertex> sGammaVertices = sGamma.vertexSet();
+
+		Set<GammaEdge> tGammaEdges = tGamma.edgeSet();
+		Set<GammaVertex> tGammaVertices = tGamma.vertexSet();
+
+		Set<GEdge> tGEdges = tG.edgeSet();
+		Set<GVertex> tGVertices = tG.vertexSet();
+		
+		Set<GEdge> sGEdges = sG.edgeSet();
+		Set<GVertex> sGVertices = sG.vertexSet();
+		
+		
+		// Check to make sure the graphs are compatible
+		if(sGVertices.size() != tGVertices.size()) {
+			throw new Exception("Unequal number of vertices between G graphs");
+		}
+		if(sGEdges.size() != sGEdges.size()) {
+			throw new Exception("Unequal number of edges betweeen G graphs");
+		}
+		// Pick a vertex, find it's counterpart, check name
+		Set<GVertex> sTestSet = new HashSet<GVertex>(sGVertices);
+		for(GVertex tGVertex : tGVertices) {
+			boolean found = false;
+			for(GVertex sGVertex : sTestSet) {
+				if(tGVertex.getName().equals(sGVertex.getName())) {
+					found = true;
+					sTestSet.remove(sGVertex);
+					break;
+				}
+			}
+			if(!found) {
+				throw new Exception("Did not find g vertex with name " + tGVertex.getName());
+			}
+		}
+		Set<GammaVertex> sGammaTestSet = new HashSet<GammaVertex>(sGammaVertices);
+		for(GammaVertex tGammaVertex : tGammaVertices) {
+			boolean found = false;
+			for(GammaVertex sGammaVertex : sGammaTestSet) {
+				if(tGammaVertex.getName().equals(sGammaVertex.getName())) {
+					found = true;
+					if(!tGammaVertex.getPVHomName().equals(sGammaVertex.getPVHomName()) || 
+						!tGammaVertex.getQVHomName().equals(sGammaVertex.getQVHomName())) {
+						throw new Exception("Vertex homomorphisms are not equal");
+					}
+					sGammaTestSet.remove(sGammaVertex);
+					break;
+				}
+			}
+			if(!found) {
+				throw new Exception("Did not find gamma vertex with name " + tGammaVertex.getName());
+			}
+		}
+		
+		
+		
+		
 		return s;
 	}
 	
