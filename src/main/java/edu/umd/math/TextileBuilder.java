@@ -9,17 +9,25 @@ import org.jgrapht.EdgeFactory;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DirectedPseudograph;
 
+/**
+ * @author brberg
+ *
+ */
 public class TextileBuilder {
 
 	public static Textile createDual(Textile t) {
 		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
 		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
 		
-		EdgeFactory<GammaVertex,GammaEdge> gammaEF = new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
-		EdgeFactory<GVertex,GEdge> gEF = new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);
+		EdgeFactory<GammaVertex,GammaEdge> gammaEF = 
+				new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
+		EdgeFactory<GVertex,GEdge> gEF = 
+				new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);
 		
-		DirectedPseudograph<GammaVertex,GammaEdge> gammaT = new DirectedPseudograph<GammaVertex,GammaEdge>(gammaEF);
-		DirectedPseudograph<GVertex,GEdge> gT = new DirectedPseudograph<GVertex,GEdge>(gEF);
+		DirectedPseudograph<GammaVertex,GammaEdge> gammaT = 
+				new DirectedPseudograph<GammaVertex,GammaEdge>(gammaEF);
+		DirectedPseudograph<GVertex,GEdge> gT = 
+				new DirectedPseudograph<GVertex,GEdge>(gEF);
 		
 		Set<GammaEdge> gammaEdges = gamma.edgeSet();
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
@@ -38,7 +46,11 @@ public class TextileBuilder {
 		for(GammaEdge gammae : gammaEdges) {
 			GammaVertex sv = nameToGammaVertex.get(gammae.getPEHom());
 			GammaVertex tv = nameToGammaVertex.get(gammae.getQEHom());
-			GammaEdge e = new GammaEdge(sv.getName(),tv.getName(),gammae.getSourceName(),gammae.getTargetName(),gammae.getName());
+			GammaEdge e = new GammaEdge(sv.getName(),
+										tv.getName(),
+										gammae.getSourceName(),
+										gammae.getTargetName(),
+										gammae.getName());
 			gammaT.addEdge(sv, tv, e);
 		}
 		
@@ -62,10 +74,13 @@ public class TextileBuilder {
 	
 	public static Textile createInverse(Textile t) {
 		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = (DirectedPseudograph<GVertex, GEdge>) t.getGGraph().clone();
+		DirectedPseudograph<GVertex,GEdge> g = 
+				(DirectedPseudograph<GVertex, GEdge>) t.getGGraph().clone();
 
-		EdgeFactory<GammaVertex,GammaEdge> gammaEF = new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
-		DirectedPseudograph<GammaVertex,GammaEdge> inverseGamma = new DirectedPseudograph<GammaVertex,GammaEdge>(gammaEF);
+		EdgeFactory<GammaVertex,GammaEdge> gammaEF = 
+				new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
+		DirectedPseudograph<GammaVertex,GammaEdge> inverseGamma = 
+				new DirectedPseudograph<GammaVertex,GammaEdge>(gammaEF);
 		
 		Set<GammaEdge> gammaEdges = gamma.edgeSet();
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
@@ -73,7 +88,9 @@ public class TextileBuilder {
 		Map<String,GammaVertex> nameToGammaVertex = new HashMap<String,GammaVertex>();
 		
 		for(GammaVertex gammaV : gammaVertices) {
-			GammaVertex inverseGammaV = new GammaVertex(gammaV.getPVHom(),gammaV.getQVHom(),gammaV.getName());
+			GammaVertex inverseGammaV = new GammaVertex(gammaV.getPVHom(),
+														gammaV.getQVHom(),
+														gammaV.getName());
 			inverseGamma.addVertex(inverseGammaV);
 			nameToGammaVertex.put(gammaV.getName(), inverseGammaV);
 		}
@@ -84,32 +101,48 @@ public class TextileBuilder {
 													gammaE.getQEHom(),
 													gammaE.getPEHom(),
 													gammaE.getName());
-			inverseGamma.addEdge(nameToGammaVertex.get(gammaE.getSourceName()), nameToGammaVertex.get(gammaE.getTargetName()), inverseGammaE);
+			inverseGamma.addEdge(nameToGammaVertex.get(gammaE.getSourceName()), 
+									nameToGammaVertex.get(gammaE.getTargetName()), 
+									inverseGammaE);
 		}
 		
 		return new Textile(inverseGamma,g);
 	}
 	
+	
+	
 	public static Textile createProductTextile(Textile t, Textile s) throws Exception {
 		
 		DirectedPseudograph<GammaVertex,GammaEdge> tGamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> tG = (DirectedPseudograph<GVertex, GEdge>) t.getGGraph().clone();
+		DirectedPseudograph<GVertex,GEdge> tG = t.getGGraph();
 
 		DirectedPseudograph<GammaVertex,GammaEdge> sGamma = s.getGammaGraph();		
 		DirectedPseudograph<GVertex,GEdge> sG = s.getGGraph();		
 
-		Set<GammaEdge> sGammaEdges = sGamma.edgeSet();
 		Set<GammaVertex> sGammaVertices = sGamma.vertexSet();
 
-		Set<GammaEdge> tGammaEdges = tGamma.edgeSet();
 		Set<GammaVertex> tGammaVertices = tGamma.vertexSet();
 
-		Set<GEdge> tGEdges = tG.edgeSet();
 		Set<GVertex> tGVertices = tG.vertexSet();
 		
 		Set<GEdge> sGEdges = sG.edgeSet();
 		Set<GVertex> sGVertices = sG.vertexSet();
 		
+		Map<String,GammaVertex> sGammaVertexMap = new HashMap<String,GammaVertex>();
+		Map<String,GVertex> sGVertexMap = new HashMap<String,GVertex>();
+		Map<String,GVertex> tGVertexMap = new HashMap<String,GVertex>();
+		
+		for(GammaVertex sGammaVertex : sGammaVertices) {
+			sGammaVertexMap.put(sGammaVertex.getName(), sGammaVertex);
+		}
+		
+		for(GVertex sGVertex : sGVertices) {
+			sGVertexMap.put(sGVertex.getName(), sGVertex);
+		}
+		
+		for(GVertex tGVertex : tGVertices) {
+			tGVertexMap.put(tGVertex.getName(), tGVertex);
+		}
 		
 		// Check to make sure the graphs are compatible
 		if(sGVertices.size() != tGVertices.size()) {
@@ -119,6 +152,7 @@ public class TextileBuilder {
 			throw new Exception("Unequal number of edges betweeen G graphs");
 		}
 		// Pick a vertex, find it's counterpart, check name
+		// TODO: switch to using the map to find gamma vertices
 		Set<GVertex> sTestSet = new HashSet<GVertex>(sGVertices);
 		for(GVertex tGVertex : tGVertices) {
 			boolean found = false;
@@ -152,10 +186,70 @@ public class TextileBuilder {
 			}
 		}
 		
+		// TODO: Create G1G2 graph
+		
+		EdgeFactory<GVertex,GEdge> gEF = 
+				new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);
+		DirectedPseudograph<GVertex,GEdge> prodG = 
+				new DirectedPseudograph<GVertex,GEdge>(gEF);
+		Map<String,GVertex> prodGVertexMap = new HashMap<String,GVertex>();
+		
+		for(GVertex tGVertex : tGVertices) {
+			prodG.addVertex(tGVertex);
+			prodGVertexMap.put(tGVertex.getName(), tGVertex);
+		}
 		
 		
+		for(GVertex tGVertex : tGVertices) {
+			Set<GEdge> tGVertexOutEdges = tG.outgoingEdgesOf(tGVertex);
+			for(GEdge tGVertexOutEdge : tGVertexOutEdges) {
+				GVertex tgvoeTargetVertex = sGVertexMap.get(tG.getEdgeTarget(tGVertexOutEdge).getName());
+				Set<GEdge> tgvoeTargetVertexOutEdges = sG.outgoingEdgesOf(tgvoeTargetVertex);
+				for(GEdge tgvoeTargetVertexOutEdge : tgvoeTargetVertexOutEdges) {
+					GEdge prodEdge = new GEdge(tGVertex.getName(),
+												tgvoeTargetVertex.getName(),
+												tGVertexOutEdge.getName() + tgvoeTargetVertexOutEdge.getName());
+					prodG.addEdge(prodGVertexMap.get(tGVertex.getName()),
+									prodGVertexMap.get(tgvoeTargetVertex.getName()),
+									prodEdge);
+				}
+			}
+		}
 		
-		return s;
+		EdgeFactory<GammaVertex,GammaEdge> gammaEF = 
+				new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
+		DirectedPseudograph<GammaVertex,GammaEdge> prodGamma = 
+				new DirectedPseudograph<GammaVertex,GammaEdge>(gammaEF);
+		Map<String,GammaVertex> prodGammaVertexMap = new HashMap<String,GammaVertex>();
+
+		
+		
+		for(GammaVertex tGammaVertex : tGammaVertices) {
+			prodGamma.addVertex(tGammaVertex);
+			prodGammaVertexMap.put(tGammaVertex.getName(), tGammaVertex);
+		}
+		
+		
+		for(GammaVertex tGammaVertex : tGammaVertices) {
+			Set<GammaEdge> tGammaVertexOutEdges = tGamma.outgoingEdgesOf(tGammaVertex);
+			for(GammaEdge tGammaVertexOutEdge : tGammaVertexOutEdges) {
+				GammaVertex tgvoeTargetVertex = sGammaVertexMap.get(tGamma.getEdgeTarget(tGammaVertexOutEdge).getName());
+				Set<GammaEdge> tgvoeTargetVertexOutEdges = sGamma.outgoingEdgesOf(tgvoeTargetVertex);
+				for(GammaEdge tgvoeTargetVertexOutEdge : tgvoeTargetVertexOutEdges) {
+					GammaEdge prodEdge = new GammaEdge(tGammaVertex.getName(),
+														tgvoeTargetVertex.getName(),
+														tGammaVertexOutEdge.getPEHom() + tgvoeTargetVertexOutEdge.getPEHom(),
+														tGammaVertexOutEdge.getQEHom() + tgvoeTargetVertexOutEdge.getQEHom(),
+														tGammaVertexOutEdge.getName() + tgvoeTargetVertexOutEdge.getName());
+					prodGamma.addEdge(prodGammaVertexMap.get(tGammaVertex.getName()),
+									prodGammaVertexMap.get(tgvoeTargetVertex.getName()),
+									prodEdge);
+				}
+			}
+		}
+		
+		
+		return new Textile(prodGamma, prodG);
 	}
 	
 	
