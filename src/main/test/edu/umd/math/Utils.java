@@ -6,7 +6,7 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 public class Utils {
 
-	public static Textile generateT() {
+	public static Textile generateNasu() {
 		
 		EdgeFactory<GammaVertex,GammaEdge> gammaEF = new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
 		EdgeFactory<GVertex,GEdge> gEF = new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);

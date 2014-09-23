@@ -9,24 +9,19 @@ public class TestCreateDual {
 
 	@Test
 	public void testCreateDual() {
-		Textile t = Utils.generateT();
+		Textile t = Utils.generateNasu();
 		
 		Textile td = TextileBuilder.createDual(t);
 
 		DirectedPseudograph<GVertex,GEdge> tdG = td.getGGraph();
 		DirectedPseudograph<GammaVertex,GammaEdge> tdGamma = td.getGammaGraph();
-		
-		
+			
 		org.junit.Assert.assertEquals("failure - g edgeset sizes not equal", 3, tdG.edgeSet().size());
 		org.junit.Assert.assertEquals("failure - gamma edgeset sizes not equal", 8, tdGamma.edgeSet().size());
 		
 		
+		
 	}
 	
-	
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
 
 }
