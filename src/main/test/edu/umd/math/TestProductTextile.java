@@ -15,6 +15,9 @@ public class TestProductTextile {
 			DirectedPseudograph<GVertex,GEdge> prodG = prod.getGGraph();
 			DirectedPseudograph<GammaVertex,GammaEdge> prodGamma = prod.getGammaGraph();
 			
+			
+			OutputHelper.printTextile(prod);
+			
 			org.junit.Assert.assertEquals("failure - g vertexset sizes not equal", 2, prodG.vertexSet().size());
 			org.junit.Assert.assertEquals("failure - gamma vertexset sizes not equal", 3, prodGamma.vertexSet().size());
 		
