@@ -22,4 +22,6 @@ public class Edge extends DefaultEdge {
 	public String getTargetName() {
 		return tName;
 	}
+	
+	
 }

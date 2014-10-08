@@ -1,9 +1,12 @@
 package edu.umd.math;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
@@ -252,7 +255,33 @@ public class TextileBuilder {
 		return new Textile(prodGamma, prodG);
 	}
 	
+	public static Textile createHigherBlockTextile(Textile T, Integer n) {	
+		return new Textile(createHigherBlockGraph(T.getGammaGraph(),n), createHigherBlockGraph(T.getGGraph(),n));
+	}
 	
-	
+	private static DirectedPseudograph<GammaVertex,GammaEdge> createHigherBlockGammaGraph(DirectedPseudograph<GammaVertex,GammaEdge> gamma, DirectedPseudograph<GVertex,GEdge> gHigherBlock, Integer n) {
+		
+		// Implement list to edge constructor for edges and vertices
+		Set<GammaEdge> eSet = gamma.edgeSet();
+		
+		Stack<List<GammaEdge>> pathStack = new Stack<List<GammaEdge>>();  
+		
+		for(GammaEdge e : eSet ) {
+			List<GammaEdge> seedList = new ArrayList<GammaEdge>();
+			seedList.add(e);
+			pathStack.push(seedList);
+		}
+		
+		while(!pathStack.empty()) {
+			List<GammaEdge> currentList = pathStack.pop();
+			if(currentList.size() == n) {
+			//	V source = new V(currentList.subList(0,n-2));
+			}
+		}
+		
+		
+		
+		return gamma;
+	}
 	
 }
