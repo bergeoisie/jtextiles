@@ -30,12 +30,5 @@ public class GammaVertex extends Vertex{
 		name = n;
 	}
 	
-	public GammaVertex(List<GammaVertex> list) {
-		StringBuilder nameSb = new StringBuilder();
-		for(GammaVertex v : list) {
-			nameSb.append(v.getName());
-		}
-		name = nameSb.toString();
-	}
 	
 }

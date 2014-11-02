@@ -5,11 +5,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jgrapht.graph.DirectedPseudograph;
 
 import com.google.common.collect.Sets;
 
 public class Textile {
+	
+	static final Logger logger = LogManager.getLogger(Textile.class.getName());
+	
 	private DirectedPseudograph<GammaVertex,GammaEdge> gammaGraph;
 	private DirectedPseudograph<GVertex,GEdge> gGraph;
 	
@@ -63,6 +68,8 @@ public class Textile {
 			for(GammaEdge gammaEdge : gammaEdges) {
 				if(namesInSymDiff.contains(gammaEdge.getPEHom()) || namesInSymDiff.contains(gammaEdge.getQEHom())) {
 					gammaToRemove.add(gammaEdge);
+					logger.debug("Added " + gammaEdge.getName() + " to the symm set");
+
 				}
 			}
 
@@ -82,6 +89,8 @@ public class Textile {
 			for(GammaVertex gammaVertex : gammaVertices) {
 				if(gammaGraph.inDegreeOf(gammaVertex) == 0 || gammaGraph.outDegreeOf(gammaVertex) == 0) {
 					gammaSinkOrSource.add(gammaVertex);
+					logger.debug("Added " + gammaVertex.getName() + " to the sink or source set");
+					
 				}
 			}
 

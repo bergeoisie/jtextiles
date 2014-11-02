@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DirectedPseudograph;
@@ -17,6 +19,8 @@ import org.jgrapht.graph.DirectedPseudograph;
  *
  */
 public class TextileBuilder {
+	
+	static final Logger logger = LogManager.getLogger(TextileBuilder.class.getName());
 
 	public static Textile createDual(Textile t) {
 		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
@@ -255,11 +259,26 @@ public class TextileBuilder {
 		return new Textile(prodGamma, prodG);
 	}
 	
-	public static Textile createHigherBlockTextile(Textile T, Integer n) {	
-		return new Textile(createHigherBlockGraph(T.getGammaGraph(),n), createHigherBlockGraph(T.getGGraph(),n));
+	public static Textile createHigherBlockTextile(Textile T, Integer n) {
+		DirectedPseudograph<GVertex,GEdge> higherG =  createHigherBlockGraph(T.getGGraph(),n);
+		DirectedPseudograph<GammaVertex,GammaEdge> higherGamma;
+		try{
+			higherGamma = createHigherBlockGammaGraph(T.getGammaGraph(),higherG,n);
+		}
+		catch(Exception e) {
+			return T;
+		}
+		return new Textile(higherGamma,higherG);
 	}
 	
-	private static DirectedPseudograph<GammaVertex,GammaEdge> createHigherBlockGammaGraph(DirectedPseudograph<GammaVertex,GammaEdge> gamma, DirectedPseudograph<GVertex,GEdge> gHigherBlock, Integer n) {
+	private static DirectedPseudograph<GammaVertex,GammaEdge> createHigherBlockGammaGraph(DirectedPseudograph<GammaVertex,GammaEdge> gamma,
+																							DirectedPseudograph<GVertex,GEdge> gHigherBlock,
+																							Integer n) throws Exception {
+		
+		EdgeFactory<GammaVertex,GammaEdge> gammaEF = 
+				new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
+		DirectedPseudograph<GammaVertex,GammaEdge> higherBlockGamma = 
+				new DirectedPseudograph<GammaVertex,GammaEdge>(gammaEF);
 		
 		// Implement list to edge constructor for edges and vertices
 		Set<GammaEdge> eSet = gamma.edgeSet();
@@ -270,18 +289,160 @@ public class TextileBuilder {
 			List<GammaEdge> seedList = new ArrayList<GammaEdge>();
 			seedList.add(e);
 			pathStack.push(seedList);
+			logger.debug("Adding " + e.getName() + " to the path stack.");
 		}
+		
+		Map<String,GammaVertex> gammaVertexNameMap = new HashMap<String,GammaVertex>();
+		Map<String,GVertex> gVertexNameMap = new HashMap<String,GVertex>();
+		
+		for(GVertex g : gHigherBlock.vertexSet()) {
+			gVertexNameMap.put(g.getName(), g);
+		}
+		
 		
 		while(!pathStack.empty()) {
 			List<GammaEdge> currentList = pathStack.pop();
+			logger.debug("Popping " +listToName(currentList));
 			if(currentList.size() == n) {
-			//	V source = new V(currentList.subList(0,n-2));
+				String sourceName = listToName(currentList.subList(0, n-1));
+				String targetName = listToName(currentList.subList(1, n));
+				
+				GammaVertex s = gammaVertexNameMap.get(sourceName);
+				
+				if(s == null) {
+					GVertex sourceP = gVertexNameMap.get(listToPName(currentList.subList(0, n-1)));
+					GVertex sourceQ = gVertexNameMap.get(listToQName(currentList.subList(0, n-1)));
+					if(sourceP == null || sourceQ == null) {
+						throw new Exception("Unlying G Vertex not found");
+					}
+					s = new GammaVertex(sourceP,sourceQ,sourceName);
+					higherBlockGamma.addVertex(s);
+					gammaVertexNameMap.put(sourceName, s);
+				}
+				
+				GammaVertex t = gammaVertexNameMap.get(targetName);
+				
+				if(t == null) {
+					GVertex targetP = gVertexNameMap.get(listToPName(currentList.subList(1, n)));
+					GVertex targetQ = gVertexNameMap.get(listToQName(currentList.subList(1, n)));
+					if(targetP == null || targetQ == null) {
+						throw new Exception("Unlying G Vertex not found");
+					}
+					t = new GammaVertex(targetP,targetQ,targetName);
+					higherBlockGamma.addVertex(t);
+					gammaVertexNameMap.put(targetName, t);
+				}
+				
+				GammaEdge higherBlockGammaEdge = new GammaEdge(s.getName(), t.getName(),
+						listToPName(currentList),listToQName(currentList),listToName(currentList));
+				higherBlockGamma.addEdge(s,t,higherBlockGammaEdge);
+			}
+			else {
+				GammaEdge last = currentList.get(currentList.size()-1);
+				Set<GammaEdge> outLast = gamma.outgoingEdgesOf(gamma.getEdgeTarget(last));
+				for(GammaEdge e : outLast) {
+					List<GammaEdge> newList = new ArrayList<GammaEdge>(currentList);
+					newList.add(e);
+					pathStack.push(newList);
+				}
 			}
 		}
+		return higherBlockGamma;
+	}
+	
+	private static DirectedPseudograph<GVertex,GEdge> createHigherBlockGraph(DirectedPseudograph<GVertex,GEdge> g, Integer n) {
+		EdgeFactory<GVertex,GEdge> gEF = 
+				new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);
+		DirectedPseudograph<GVertex,GEdge> higherBlockG = 
+				new DirectedPseudograph<GVertex,GEdge>(gEF);
 		
+		// Implement list to edge constructor for edges and vertices
+		Set<GEdge> eSet = g.edgeSet();
 		
+		Stack<List<GEdge>> pathStack = new Stack<List<GEdge>>();  
 		
-		return gamma;
+		for(GEdge e : eSet ) {
+			List<GEdge> seedList = new ArrayList<GEdge>();
+			seedList.add(e);
+			pathStack.push(seedList);
+		}
+		
+		Map<String,GVertex> gVertexNameMap = new HashMap<String,GVertex>();
+		
+		while(!pathStack.empty()) {
+			List<GEdge> currentList = pathStack.pop();
+			logger.debug("Popping " +listToName(currentList));
+			if(currentList.size() == n) {
+				logger.debug("Our list is of the appropriate length, adding new edge");
+				String sourceName = listToName(currentList.subList(0, n-1));
+				String targetName = listToName(currentList.subList(1, n));
+				
+				logger.debug("Source name is " + sourceName + " and target name is " + targetName);
+				
+				GVertex s = gVertexNameMap.get(sourceName);
+
+				
+				
+				if(s == null) {
+					logger.debug("Could not find existing vertex, adding " + sourceName);
+					s = new GVertex(sourceName);
+					higherBlockG.addVertex(s);
+					gVertexNameMap.put(sourceName, s);
+				}
+
+				GVertex t = gVertexNameMap.get(targetName);
+				
+				if(t == null) {
+					logger.debug("Could not find existing vertex, adding " + targetName);
+					t = new GVertex(targetName);
+					higherBlockG.addVertex(t);
+					gVertexNameMap.put(targetName, t);
+				}
+				
+				GEdge higherBlockGEdge = new GEdge(s.getName(), t.getName(),listToName(currentList));
+				higherBlockG.addEdge(s,t,higherBlockGEdge);
+			}
+			else {
+				GEdge last = currentList.get(currentList.size()-1);
+				logger.debug("Building new path using " + last.getName());
+				Set<GEdge> outLast = g.outgoingEdgesOf(g.getEdgeTarget(last));
+				logger.debug("There are " + outLast.size() + " outgoing edges");
+				for(GEdge e : outLast) {
+					List<GEdge> newList = new ArrayList<GEdge>(currentList);
+					newList.add(e);
+					pathStack.push(newList);
+				}
+			}
+		}
+		return higherBlockG;
+	}
+	
+
+	private static <E extends Edge> String listToName(List<E> l) {
+		
+		StringBuilder sb = new StringBuilder();
+		for(E edge : l) {
+			sb.append(edge.getName());
+		}
+		return sb.toString();
+	}
+	
+	private static String listToPName(List<GammaEdge> l) {
+		
+		StringBuilder sb = new StringBuilder();
+		for(GammaEdge edge : l) {
+			sb.append(edge.getPEHom());
+		}
+		return sb.toString();
+	}
+
+	private static String listToQName(List<GammaEdge> l) {
+		
+		StringBuilder sb = new StringBuilder();
+		for(GammaEdge edge : l) {
+			sb.append(edge.getQEHom());
+		}
+		return sb.toString();
 	}
 	
 }
