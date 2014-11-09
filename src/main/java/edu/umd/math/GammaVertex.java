@@ -1,7 +1,5 @@
 package edu.umd.math;
 
-import java.util.List;
-
 public class GammaVertex extends Vertex{
 
 	private GVertex pv;
@@ -30,5 +28,18 @@ public class GammaVertex extends Vertex{
 		name = n;
 	}
 	
+	public GammaVertex(String n) {
+		pv = null;
+		qv = null;
+		name = n;
+	}
+	
+	protected void setPVHom(GVertex p) {
+		pv = p;
+	}
+	
+	protected void setQVHom(GVertex q) {
+		qv = q;
+	}
 	
 }
