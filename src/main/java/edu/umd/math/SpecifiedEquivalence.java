@@ -31,17 +31,11 @@ public class SpecifiedEquivalence {
 		EdgeFactory<GammaVertex,GammaEdge> gammaEF = 
 				new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
 		DirectedPseudograph<GammaVertex,GammaEdge> textileGamma = new DirectedPseudograph<GammaVertex,GammaEdge>(gammaEF);
-		
-		DirectedPseudograph<GVertex,GEdge> ghProduct = GraphBuilder.createProductGraph(g, h);
-		DirectedPseudograph<GVertex,GEdge> hgProduct = GraphBuilder.createProductGraph(h, g);
-		
+				
 		Map<String,GammaVertex> textileGammaMap = new HashMap<String,GammaVertex>();
-		Map<String,GEdge> gEdgeMap = new HashMap<String,GEdge>();
 
 		
-		Set<GVertex> ghVertices = ghProduct.vertexSet();
 		Set<GEdge> hEdges = h.edgeSet();
-		Set<GEdge> gEdges = g.edgeSet();
 		
 		for(GEdge hEdge : hEdges) {
 			GammaVertex gammaV = new GammaVertex(hEdge.getName());
@@ -62,9 +56,6 @@ public class SpecifiedEquivalence {
 			GammaEdge gammaE = new GammaEdge(s.getName(),t.getName(),ee.getA().getName(),ee.getAPrime().getName(),ee.getName());
 			textileGamma.addEdge(s, t, gammaE);
 		}
-		
-		
-		
 		
 		return new Textile(textileGamma,g);
 	}
