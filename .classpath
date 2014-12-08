@@ -7,7 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src/main/test"/>
-	<classpathentry kind="lib" path="C:/Users/Brendan/Downloads/jgrapht-master/jgrapht-master/jgrapht-core/target/jgrapht-core-0.9.1-SNAPSHOT.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
 		<attributes>

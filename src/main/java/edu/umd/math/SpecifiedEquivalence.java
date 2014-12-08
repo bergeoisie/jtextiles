@@ -26,6 +26,12 @@ public class SpecifiedEquivalence {
 		seArray = sm;
 	}
 	
+	public SpecifiedEquivalence(SpecHelper sh, DirectedPseudograph<GVertex,GEdge> gg, DirectedPseudograph<GVertex,GEdge> hh) {
+		g = gg;
+		h = hh;
+		seArray = sh.getCurrentEntryList();
+	}
+	
 	public Textile toTextile() {
 		
 		EdgeFactory<GammaVertex,GammaEdge> gammaEF = 

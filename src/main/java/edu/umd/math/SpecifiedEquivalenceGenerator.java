@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jgrapht.graph.DirectedPseudograph;
 
 public class SpecifiedEquivalenceGenerator {
@@ -23,11 +25,14 @@ public class SpecifiedEquivalenceGenerator {
 	private PriorityQueue<SpecHelper> specHelperPQueue;
 	
 	
+	static final Logger logger = LogManager.getLogger(SpecifiedEquivalenceGenerator.class.getName());
+
+	
 	public SpecifiedEquivalenceGenerator(DirectedPseudograph<GVertex,GEdge> gg, DirectedPseudograph<GVertex,GEdge> hh) {
 		g = gg;
 		h = hh;
 		gh = GraphBuilder.createProductGraph(gg, hh);
-		gh = GraphBuilder.createProductGraph(hh, gg);
+		hg = GraphBuilder.createProductGraph(hh, gg);
 		specEquivList = new ArrayList<SpecifiedEquivalence>();
 		specHelperPQueue = new PriorityQueue<SpecHelper>(10, new Comparator<SpecHelper>() {
 	        public int compare(SpecHelper sh1, SpecHelper sh2) {
@@ -67,16 +72,32 @@ public class SpecifiedEquivalenceGenerator {
 			specHelperPQueue.add(sh);
 		}
 
-
-
 		// iterate through the pqueue, if it's a full equiv entry, convert it to a SE and put it in the list, otherwise
 		// generate all the new spec helpers.
 		while(!specHelperPQueue.isEmpty()) {
 			SpecHelper currentSpecHelper = specHelperPQueue.remove();
+			
+			if(currentSpecHelper.getLength() == gh.edgeSet().size()) {
+				logger.info("Our current spec helper is of length " +
+							currentSpecHelper.getLength() + 
+							" so it will be transformed into a SE and added to the list");
+				SpecifiedEquivalence se = new SpecifiedEquivalence(currentSpecHelper,g,h);
+				specEquivList.add(se);
+			}
+			
 			EdgePair nextEP = currentSpecHelper.nextEP(g,h,hVertexMap);
 			if(nextEP != null) {
 				Set<EdgePair> nextPairs = getAllPossibleEdgePairs(nextEP,gVertexMap,hVertexMap);
-				
+				for(EdgePair np : nextPairs) {
+					if(!currentSpecHelper.hasSeenBAprimePair(np)) {
+						SpecHelper newSpecHelper = new SpecHelper(currentSpecHelper);
+						EquivEntry createdEquivEntry = new EquivEntry(nextEP.getFirst(),np.getFirst(),np.getSecond(),nextEP.getSecond());
+						newSpecHelper.addEquivEntry(createdEquivEntry);
+						specHelperPQueue.add(newSpecHelper);
+					}
+				}
+			} else {
+				logger.error("We ran out of edge pairs. This shouldn't happen");
 			}
 		}
 
@@ -112,91 +133,4 @@ public class SpecifiedEquivalenceGenerator {
 		return bAprimePairs;
 	}
 	
-	
-	class SpecHelper {
-		private List<EquivEntry> currentEntryList;
-		private Set<EdgePair> seenABPrimePairs;
-		private Set<EdgePair> seenBAPrimePairs;
-		
-		/*
-		 * TODO: Add in copy constructor and add EquivEntry function
-		 */
-		public SpecHelper(SpecHelper sh) {
-			currentEntryList = new ArrayList<EquivEntry>(sh.getCurrentEntryList());
-			seenABPrimePairs = new HashSet<EdgePair>();
-			seenBAPrimePairs = new HashSet<EdgePair>();
-			generateSeenPairs();
-		}
-		
-		public SpecHelper() {
-			currentEntryList = new ArrayList<EquivEntry>();
-			seenABPrimePairs = new HashSet<EdgePair>();
-			seenBAPrimePairs = new HashSet<EdgePair>();
-		}
-		
-		public SpecHelper(EquivEntry a) {
-			currentEntryList = new ArrayList<EquivEntry>();
-			seenABPrimePairs = new HashSet<EdgePair>();
-			seenBAPrimePairs = new HashSet<EdgePair>();
-			this.addEquivEntry(a);
-		}
-		
-		public void addEquivEntry(EquivEntry a) {
-			currentEntryList.add(a);
-			EdgePair ep = new EdgePair(a.getA(),a.getBPrime());
-			seenABPrimePairs.add(ep);
-		}
-		
-		public int getLength() {
-			return currentEntryList.size();
-		}
-		
-		protected List<EquivEntry> getCurrentEntryList() {
-			return currentEntryList;
-		}
-		
-		private void generateSeenPairs() {
-			
-			for(EquivEntry ee : currentEntryList) {
-				EdgePair abprime = new EdgePair(ee.getA(),ee.getBPrime());
-				seenABPrimePairs.add(abprime);
-				EdgePair baprime = new EdgePair(ee.getB(),ee.getAPrime());
-				seenBAPrimePairs.add(baprime);
-			}
-						
-		}
-		
-		public EdgePair nextEP(DirectedPseudograph<GVertex,GEdge> g, DirectedPseudograph<GVertex,GEdge> h, Map<String,GVertex> hVertexMap) {
-			for(GEdge aEdge : g.edgeSet()) {
-				String intVertexName = g.getEdgeTarget(aEdge).getName();
-				GVertex intVertexInH = hVertexMap.get(intVertexName);
-				Set<GEdge> outIntEdges = h.outgoingEdgesOf(intVertexInH);
-				for(GEdge bPrimeEdge : outIntEdges ) {
-					EdgePair aBPrimePair = new EdgePair(aEdge,bPrimeEdge);
-					if(seenABPrimePairs.contains(aBPrimePair)) {
-						return aBPrimePair;
-					}
-				}
-			}
-			return null;
-		}
-	}
-	
-	class EdgePair {
-		GEdge first;
-		GEdge second;
-		
-		public EdgePair(GEdge f, GEdge s) {
-			first = f;
-			second = s;
-		}
-		
-		public GEdge getFirst() {
-			return first;
-		}
-		
-		public GEdge getSecond() {
-			return second;
-		}
-	}
 }
