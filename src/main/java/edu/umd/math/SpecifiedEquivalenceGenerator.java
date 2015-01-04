@@ -87,8 +87,12 @@ public class SpecifiedEquivalenceGenerator {
 			
 			EdgePair nextEP = currentSpecHelper.nextEP(g,h,hVertexMap);
 			if(nextEP != null) {
+				logger.info("Found a non-null EP, getting possible associations");
 				Set<EdgePair> nextPairs = getAllPossibleEdgePairs(nextEP,gVertexMap,hVertexMap);
 				for(EdgePair np : nextPairs) {
+					logger.info("Checking edge pair with b = " +
+								np.getFirst().getName() + 
+								" and aPrime = " + np.getSecond().getName());
 					if(!currentSpecHelper.hasSeenBAprimePair(np)) {
 						SpecHelper newSpecHelper = new SpecHelper(currentSpecHelper);
 						EquivEntry createdEquivEntry = new EquivEntry(nextEP.getFirst(),np.getFirst(),np.getSecond(),nextEP.getSecond());
@@ -131,6 +135,10 @@ public class SpecifiedEquivalenceGenerator {
 		}
 
 		return bAprimePairs;
+	}
+	
+	public List<SpecifiedEquivalence> getAllSpecEquivs() {
+		return specEquivList;
 	}
 	
 }
