@@ -53,6 +53,14 @@ class SpecHelper {
 	public int getLength() {
 		return currentEntryList.size();
 	}
+	
+	public int getSeenABPrimeSize() {
+		return seenABPrimePairs.size();
+	}
+	
+	public int getSeenBAPrimeSize() {
+		return seenBAPrimePairs.size();
+	}
 
 	public List<EquivEntry> getCurrentEntryList() {
 		return currentEntryList;
@@ -87,11 +95,11 @@ class SpecHelper {
 		return null;
 	}
 
-	private Set<EdgePair> getSeenABPrimePairs() {
+	public Set<EdgePair> getSeenABPrimePairs() {
 		return seenABPrimePairs;
 	}
 	
-	private Set<EdgePair> getSeenBAPrimePairs() {
+	public Set<EdgePair> getSeenBAPrimePairs() {
 		return seenBAPrimePairs;
 	}
 	
@@ -99,7 +107,10 @@ class SpecHelper {
 		return seenBAPrimePairs.contains(ep);
 	}
 	
-	
-	
+	public void printHelper() {
+		for(EquivEntry e : currentEntryList) {
+			e.printEntry();
+		}
+	}
 
 }

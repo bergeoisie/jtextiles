@@ -77,6 +77,11 @@ public class SpecifiedEquivalenceGenerator {
 		while(!specHelperPQueue.isEmpty()) {
 			SpecHelper currentSpecHelper = specHelperPQueue.remove();
 			
+			logger.info("currentSpecHelper size is " + currentSpecHelper.getLength());
+			logger.info("currentSpecHelper's seenABPrime size is " + currentSpecHelper.getSeenABPrimeSize());
+			logger.info("currentSpecHelper's seenBAPrime size is " + currentSpecHelper.getSeenBAPrimeSize());
+			currentSpecHelper.printHelper();
+			
 			if(currentSpecHelper.getLength() == gh.edgeSet().size()) {
 				logger.info("Our current spec helper is of length " +
 							currentSpecHelper.getLength() + 
