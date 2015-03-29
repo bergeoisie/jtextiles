@@ -32,4 +32,13 @@ class EdgePair {
 	            append(second.getName(), rhs.second.getName()).
 	            isEquals();
 	    }
+		
+		@Override
+		public int hashCode() {
+			return first.getName().hashCode() + second.getName().hashCode();
+		}
+		
+		public void printEdgePair() {
+			System.out.println("First: " + first.getName() + " Second: " + second.getName());
+		}
 	}

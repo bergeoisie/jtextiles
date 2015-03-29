@@ -89,24 +89,25 @@ public class SpecifiedEquivalenceGenerator {
 				SpecifiedEquivalence se = new SpecifiedEquivalence(currentSpecHelper,g,h);
 				specEquivList.add(se);
 			}
-			
-			EdgePair nextEP = currentSpecHelper.nextEP(g,h,hVertexMap);
-			if(nextEP != null) {
-				logger.info("Found a non-null EP, getting possible associations");
-				Set<EdgePair> nextPairs = getAllPossibleEdgePairs(nextEP,gVertexMap,hVertexMap);
-				for(EdgePair np : nextPairs) {
-					logger.info("Checking edge pair with b = " +
+			else{
+				EdgePair nextEP = currentSpecHelper.nextEP(g,h,hVertexMap);
+				if(nextEP != null) {
+					logger.info("Found a non-null EP, getting possible associations");
+					Set<EdgePair> nextPairs = getAllPossibleEdgePairs(nextEP,gVertexMap,hVertexMap);
+					for(EdgePair np : nextPairs) {
+						logger.info("Checking edge pair with b = " +
 								np.getFirst().getName() + 
 								" and aPrime = " + np.getSecond().getName());
-					if(!currentSpecHelper.hasSeenBAprimePair(np)) {
-						SpecHelper newSpecHelper = new SpecHelper(currentSpecHelper);
-						EquivEntry createdEquivEntry = new EquivEntry(nextEP.getFirst(),np.getFirst(),np.getSecond(),nextEP.getSecond());
-						newSpecHelper.addEquivEntry(createdEquivEntry);
-						specHelperPQueue.add(newSpecHelper);
+						if(!currentSpecHelper.hasSeenBAprimePair(np)) {
+							SpecHelper newSpecHelper = new SpecHelper(currentSpecHelper);
+							EquivEntry createdEquivEntry = new EquivEntry(nextEP.getFirst(),np.getFirst(),np.getSecond(),nextEP.getSecond());
+							newSpecHelper.addEquivEntry(createdEquivEntry);
+							specHelperPQueue.add(newSpecHelper);
+						}
 					}
+				} else {
+					logger.error("We ran out of edge pairs. This shouldn't happen");
 				}
-			} else {
-				logger.error("We ran out of edge pairs. This shouldn't happen");
 			}
 		}
 

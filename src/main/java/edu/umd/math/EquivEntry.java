@@ -56,6 +56,11 @@ public class EquivEntry {
             isEquals();
     }
 	
+	@Override
+	public int hashCode() {
+		return a.getName().hashCode() + b.getName().hashCode() + aprime.getName().hashCode() + bprime.getName().hashCode();
+	}
+	
 	public void printEntry() {
 		logger.info("a = " + a.getName() + " b = " + b.getName() 
 				+ " aprime = " + aprime.getName() + " bprime = " + bprime.getName());
