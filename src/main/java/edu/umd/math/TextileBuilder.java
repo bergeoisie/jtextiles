@@ -445,4 +445,8 @@ public class TextileBuilder {
 		return sb.toString();
 	}
 	
+	public static Textile inducedRightResolvingP(Textile T) {
+		return T;
+	}
+	
 }
