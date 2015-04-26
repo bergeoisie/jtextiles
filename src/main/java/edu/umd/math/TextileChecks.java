@@ -34,7 +34,7 @@ public class TextileChecks {
 
 		Map<String,GEdge> edgeMap = new HashMap<String,GEdge>();
 
-		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
+		GammaGraph gamma = t.getGammaGraph();
 		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
 
 		Set<GEdge> gEdges = g.edgeSet();
@@ -65,7 +65,7 @@ public class TextileChecks {
 
 	public static boolean isLR(Textile t) {
 
-		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
+		GammaGraph gamma = t.getGammaGraph();
 		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
@@ -103,7 +103,7 @@ public class TextileChecks {
 	}
 
 	public static boolean isQLeftResolving(Textile t) {
-		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
+		GammaGraph gamma = t.getGammaGraph();
 		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
@@ -128,7 +128,7 @@ public class TextileChecks {
 
 	public static boolean isQRightResolving(Textile t) {
 
-		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
+		GammaGraph gamma = t.getGammaGraph();
 		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
@@ -155,7 +155,7 @@ public class TextileChecks {
 
 	public static boolean isPLeftResolving(Textile t) {
 
-		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
+		GammaGraph gamma = t.getGammaGraph();
 		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
@@ -180,7 +180,7 @@ public class TextileChecks {
 
 	public static boolean isPRightResolving(Textile t) {
 
-		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
+		GammaGraph gamma = t.getGammaGraph();
 		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
@@ -205,5 +205,7 @@ public class TextileChecks {
 		return true;
 	}
 
+	
+	
 
 }

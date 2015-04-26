@@ -7,7 +7,7 @@ import org.jgrapht.graph.DirectedPseudograph;
 public class OutputHelper {
 
 	public static void printTextile(Textile t) {
-		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
+		GammaGraph gamma = t.getGammaGraph();
 		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
 		
 		
@@ -74,8 +74,23 @@ public class OutputHelper {
 			System.out.println("");
 		}
 	}
+
+	public static void printGraph(GammaGraph graph) {
+		Set<GammaVertex> vertices = graph.vertexSet();
+
+		for(GammaVertex gammav : vertices) {
+			System.out.print(gammav.getName() + " ");
+			for(GammaVertex igv : vertices) {
+				Set<GammaEdge> edges = graph.getAllEdges(gammav, igv);
+				String formattedEdges = formatEdges(edges);
+				System.out.print(formattedEdges);
+			}
+			System.out.println("");
+		}
+	}
 	
-	public static void printHomomorphisms(DirectedPseudograph<GammaVertex,GammaEdge> graph) {
+	
+	public static void printHomomorphisms(GammaGraph graph) {
 		Set<GammaVertex> gammaVertices = graph.vertexSet();
 
 		for(GammaVertex gammav : gammaVertices) {

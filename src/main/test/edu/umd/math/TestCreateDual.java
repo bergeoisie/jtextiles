@@ -14,7 +14,7 @@ public class TestCreateDual {
 		Textile td = TextileBuilder.createDual(t);
 
 		DirectedPseudograph<GVertex,GEdge> tdG = td.getGGraph();
-		DirectedPseudograph<GammaVertex,GammaEdge> tdGamma = td.getGammaGraph();
+		GammaGraph tdGamma = td.getGammaGraph();
 			
 		org.junit.Assert.assertEquals("failure - g edgeset sizes not equal", 3, tdG.edgeSet().size());
 		org.junit.Assert.assertEquals("failure - gamma edgeset sizes not equal", 8, tdGamma.edgeSet().size());

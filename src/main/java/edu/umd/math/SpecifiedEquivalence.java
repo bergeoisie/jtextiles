@@ -9,6 +9,8 @@ import org.jgrapht.EdgeFactory;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DirectedPseudograph;
 
+import edu.umd.math.GammaGraph.GammaGraphBuilder;
+
 public class SpecifiedEquivalence {
 
 	private DirectedPseudograph<GVertex,GEdge> g;
@@ -33,11 +35,9 @@ public class SpecifiedEquivalence {
 	}
 	
 	public Textile toTextile() {
+						
+		GammaGraphBuilder textileGammaBuilder = new GammaGraphBuilder();
 		
-		EdgeFactory<GammaVertex,GammaEdge> gammaEF = 
-				new ClassBasedEdgeFactory<GammaVertex,GammaEdge>(GammaEdge.class);
-		DirectedPseudograph<GammaVertex,GammaEdge> textileGamma = new DirectedPseudograph<GammaVertex,GammaEdge>(gammaEF);
-				
 		Map<String,GammaVertex> textileGammaMap = new HashMap<String,GammaVertex>();
 
 		
@@ -46,7 +46,7 @@ public class SpecifiedEquivalence {
 		for(GEdge hEdge : hEdges) {
 			GammaVertex gammaV = new GammaVertex(hEdge.getName());
 			textileGammaMap.put(gammaV.getName(), gammaV);
-			textileGamma.addVertex(gammaV);
+			textileGammaBuilder.addVertex(gammaV);
 		}
 				
 		
@@ -60,8 +60,10 @@ public class SpecifiedEquivalence {
 			}
 			GammaVertex t = textileGammaMap.get(ee.getBPrime().getName());
 			GammaEdge gammaE = new GammaEdge(s.getName(),t.getName(),ee.getA().getName(),ee.getAPrime().getName(),ee.getName());
-			textileGamma.addEdge(s, t, gammaE);
+			textileGammaBuilder.addEdge(s, t, gammaE);
 		}
+		
+		GammaGraph textileGamma = textileGammaBuilder.build();
 		
 		return new Textile(textileGamma,g);
 	}
