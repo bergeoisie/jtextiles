@@ -13,7 +13,7 @@ public class TestProductTextile {
 		try {
 			Textile prod = TextileBuilder.createProductTextile(t, s);
 			DirectedPseudograph<GVertex,GEdge> prodG = prod.getGGraph();
-			DirectedPseudograph<GammaVertex,GammaEdge> prodGamma = prod.getGammaGraph();
+			GammaGraph prodGamma = prod.getGammaGraph();
 			
 			
 			OutputHelper.printTextile(prod);

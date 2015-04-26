@@ -15,16 +15,17 @@ public class Textile {
 	
 	static final Logger logger = LogManager.getLogger(Textile.class.getName());
 	
-	private DirectedPseudograph<GammaVertex,GammaEdge> gammaGraph;
+	private GammaGraph gammaGraph;
+
 	private DirectedPseudograph<GVertex,GEdge> gGraph;
 	
-	public Textile(DirectedPseudograph<GammaVertex,GammaEdge> gamma,
+	public Textile(GammaGraph gamma,
 			DirectedPseudograph<GVertex,GEdge> g) {
 		gammaGraph = gamma;
 		gGraph = g;
 	}
 	
-	public DirectedPseudograph<GammaVertex,GammaEdge> getGammaGraph() {
+	public GammaGraph getGammaGraph() {
 		return gammaGraph;
 	}
 	
