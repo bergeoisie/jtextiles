@@ -205,6 +205,13 @@ public class TextileChecks {
 		return true;
 	}
 
+	public static boolean isPRightDefinite(Textile t) {
+		
+		
+		
+		
+		return false;
+	}
 	
 	
 

@@ -1,5 +1,6 @@
 package edu.umd.math;
 
+
 public class GammaVertex extends Vertex{
 
 	private GVertex pv;
