@@ -6,7 +6,7 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 import edu.umd.math.GammaGraph.GammaGraphBuilder;
 
-public class Utils {
+public class TestTextileUtils {
 
 	public static Textile generateNasu() {
 		

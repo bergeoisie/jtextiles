@@ -9,7 +9,7 @@ public class TestCreateDual {
 
 	@Test
 	public void testCreateDual() {
-		Textile t = Utils.generateNasu();
+		Textile t = TestTextileUtils.generateNasu();
 		
 		Textile td = TextileBuilder.createDual(t);
 

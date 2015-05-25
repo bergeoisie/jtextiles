@@ -7,8 +7,8 @@ public class TestProductTextile {
 
 	@Test
 	public void testCreateDual() {
-		Textile t = Utils.generateNasu();
-		Textile s = Utils.generateNasu();
+		Textile t = TestTextileUtils.generateNasu();
+		Textile s = TestTextileUtils.generateNasu();
 		
 		try {
 			Textile prod = TextileBuilder.createProductTextile(t, s);
