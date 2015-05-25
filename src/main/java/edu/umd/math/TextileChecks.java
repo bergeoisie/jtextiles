@@ -207,6 +207,12 @@ public class TextileChecks {
 
 	public static boolean isPRightDefinite(Textile t) {
 		
+	//	createRuleSetForTextile(t);
+	//	initialPopulateMatrix(t);
+		
+	//	iterateThroughMatrixAndApplyRules();
+		
+		
 		
 		
 		
