@@ -24,4 +24,9 @@ public class ProductionRule {
 		return Optional.fromNullable(gv);
 	}
 	
+	@Override
+	public String toString() {
+		return "ProductionRule, from: " + from.getName() + " to: " + to.getName();
+	}
+	
 }

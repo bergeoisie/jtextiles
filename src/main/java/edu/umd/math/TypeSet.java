@@ -1,12 +1,26 @@
 package edu.umd.math;
 
+import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.google.common.base.Optional;
 
 public class TypeSet {
 
-	Set<GammaVertex> vertexSet;
+	private static final Logger logger = LogManager.getLogger(SpecifiedEquivalenceGenerator.class.getName());
+	
+	private Set<GammaVertex> vertexSet;
+	
+	public TypeSet() {
+		vertexSet = new HashSet<GammaVertex>();	
+	}
+	
+	public TypeSet(Set<GammaVertex> vertexSet) {
+		this.vertexSet = vertexSet;
+	}
 	
 	public int getSize() {
 		return vertexSet.size();
@@ -21,7 +35,10 @@ public class TypeSet {
 		for(GammaVertex v : vertexSet) {
 			Optional<GammaVertex> ruleResult = rule.applyRule(v);
 			if(ruleResult.isPresent()) {
-				result.addVertex(v);
+				logger.debug("We have applied " 
+							+ rule.toString() + " and received " 
+							+ ruleResult.get().getName());
+				result.addVertex(ruleResult.get());
 			}
 		}
 		return result;

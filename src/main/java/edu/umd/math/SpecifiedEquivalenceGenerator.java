@@ -25,7 +25,7 @@ public class SpecifiedEquivalenceGenerator {
 	private PriorityQueue<SpecHelper> specHelperPQueue;
 	
 	
-	static final Logger logger = LogManager.getLogger(SpecifiedEquivalenceGenerator.class.getName());
+	private static final Logger logger = LogManager.getLogger(SpecifiedEquivalenceGenerator.class.getName());
 
 	
 	public SpecifiedEquivalenceGenerator(DirectedPseudograph<GVertex,GEdge> gg, DirectedPseudograph<GVertex,GEdge> hh) {

@@ -1,5 +1,6 @@
 package edu.umd.math;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.jgrapht.EdgeFactory;
@@ -65,16 +66,25 @@ public class TestProductionRuleMachine {
 		gammaBuilder.addEdge(gammav3, gammav2, gammae7);
 		gammaBuilder.addEdge(gammav3, gammav3, gammae8);
 		
-		GammaGraph gamma = gammaBuilder.build();
+	//	GammaGraph gamma = gammaBuilder.build();
 		
 		
 		ProductionRule oneToTwoRule = new ProductionRule(gammav1,gammav2);
 		ProductionRule oneToThreeRule = new ProductionRule(gammav1,gammav3);
 		
+		Set<ProductionRule> prodRuleSet = new HashSet<ProductionRule>();
+		
+		prodRuleSet.add(oneToTwoRule);
+		prodRuleSet.add(oneToThreeRule);
+		
+		ProductionRuleMachine prm = new ProductionRuleMachine(prodRuleSet);
+		
+		TypeSet typeSetOfOne = new TypeSet();
+		
+		TypeSet resultFromOne = prm.applyRules(typeSetOfOne);
 		
 		
-		
-		Assert.assertEquals("failure - rule machine does not apply properly", 2, 2);
+		Assert.assertEquals("failure - rule machine does not apply properly", resultFromOne.getSize(), 2);
 		
 		
 	}
