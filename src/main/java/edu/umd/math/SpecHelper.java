@@ -77,7 +77,7 @@ class SpecHelper {
 
 	}
 
-	public EdgePair nextEP(DirectedPseudograph<GVertex,GEdge> g, DirectedPseudograph<GVertex,GEdge> h, Map<String,GVertex> hVertexMap) {
+	public EdgePair nextEP(GGraph g, GGraph h, Map<String,GVertex> hVertexMap) {
 		for(GEdge aEdge : g.edgeSet()) {
 			String intVertexName = g.getEdgeTarget(aEdge).getName();
 			GVertex intVertexInH = hVertexMap.get(intVertexName);

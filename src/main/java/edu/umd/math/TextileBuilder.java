@@ -26,17 +26,15 @@ public class TextileBuilder {
 
 	public static Textile createDual(Textile t) {
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GGraph g = t.getGGraph();
 		
 
 		EdgeFactory<GVertex,GEdge> gEF = 
 				new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);
 
 		GammaGraphBuilder ggb = new GammaGraphBuilder();
+		GGraph.GGraphBuilder gTBuilder = new GGraph.GGraphBuilder();
 
-		DirectedPseudograph<GVertex,GEdge> gT = 
-				new DirectedPseudograph<GVertex,GEdge>(gEF);
-		
 		Set<GammaEdge> gammaEdges = gamma.edgeSet();
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
 		
@@ -66,7 +64,7 @@ public class TextileBuilder {
 		
 		for(GVertex gv : gVertices) {
 			GVertex gtv = new GVertex(gv.getName());
-			gT.addVertex(gtv);
+			gTBuilder.addVertex(gtv);
 			nameToGVertex.put(gtv.getName(), gtv);
 		}
 		
@@ -74,18 +72,18 @@ public class TextileBuilder {
 			GVertex sv = nameToGVertex.get(gammav.getPVHomName());
 			GVertex tv = nameToGVertex.get(gammav.getQVHomName());
 			GEdge e = new GEdge(sv.getName(),tv.getName(),gammav.getName());
-			gT.addEdge(sv,tv,e);
+			gTBuilder.addEdge(sv,tv,e);
 		}
 		
 		GammaGraph gammaT = ggb.build();
-		
+		GGraph gT = gTBuilder.build();
+
 		return new Textile(gammaT,gT);
 	}
 	
 	public static Textile createInverse(Textile t) {
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = 
-				(DirectedPseudograph<GVertex, GEdge>) t.getGGraph().clone();
+		GGraph g = t.getGGraph();
 
 		GammaGraphBuilder ggb = new GammaGraphBuilder();
 		
@@ -124,10 +122,10 @@ public class TextileBuilder {
 	public static Textile createProductTextile(Textile t, Textile s) throws Exception {
 		
 		GammaGraph tGamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> tG = t.getGGraph();
+		GGraph tG = t.getGGraph();
 
 		GammaGraph sGamma = s.getGammaGraph();		
-		DirectedPseudograph<GVertex,GEdge> sG = s.getGGraph();		
+		GGraph sG = s.getGGraph();
 
 		Set<GammaVertex> sGammaVertices = sGamma.vertexSet();
 
@@ -197,15 +195,13 @@ public class TextileBuilder {
 		}
 		
 		// TODO: Create G1G2 graph
-		
-		EdgeFactory<GVertex,GEdge> gEF = 
-				new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);
-		DirectedPseudograph<GVertex,GEdge> prodG = 
-				new DirectedPseudograph<GVertex,GEdge>(gEF);
+
+
+		GGraph.GGraphBuilder prodGBuilder = new GGraph.GGraphBuilder();
 		Map<String,GVertex> prodGVertexMap = new HashMap<String,GVertex>();
-		
+
 		for(GVertex tGVertex : tGVertices) {
-			prodG.addVertex(tGVertex);
+			prodGBuilder.addVertex(tGVertex);
 			prodGVertexMap.put(tGVertex.getName(), tGVertex);
 		}
 		
@@ -219,7 +215,7 @@ public class TextileBuilder {
 					GEdge prodEdge = new GEdge(tGVertex.getName(),
 												tgvoeTargetVertex.getName(),
 												tGVertexOutEdge.getName() + tgvoeTargetVertexOutEdge.getName());
-					prodG.addEdge(prodGVertexMap.get(tGVertex.getName()),
+					prodGBuilder.addEdge(prodGVertexMap.get(tGVertex.getName()),
 									prodGVertexMap.get(tgvoeTargetVertex.getName()),
 									prodEdge);
 				}
@@ -255,13 +251,15 @@ public class TextileBuilder {
 			}
 		}
 		
+		GGraph prodG = prodGBuilder.build();
 		GammaGraph prodGamma = prodGammaBuilder.build();
-		
+
+
 		return new Textile(prodGamma, prodG);
 	}
 	
 	public static Textile createHigherBlockTextile(Textile T, Integer n) {
-		DirectedPseudograph<GVertex,GEdge> higherG =  createHigherBlockGraph(T.getGGraph(),n);
+		GGraph higherG =  createHigherBlockGraph(T.getGGraph(),n);
 		GammaGraph higherGamma;
 		try{
 			higherGamma = createHigherBlockGammaGraph(T.getGammaGraph(),higherG,n);
@@ -273,7 +271,7 @@ public class TextileBuilder {
 	}
 	
 	private static GammaGraph createHigherBlockGammaGraph(GammaGraph gamma,
-														DirectedPseudograph<GVertex,GEdge> gHigherBlock,
+														GGraph gHigherBlock,
 														Integer n) throws Exception {
 
 		GammaGraphBuilder ggb = new GammaGraphBuilder();
@@ -348,7 +346,7 @@ public class TextileBuilder {
 		return ggb.build();
 	}
 	
-	private static DirectedPseudograph<GVertex,GEdge> createHigherBlockGraph(DirectedPseudograph<GVertex,GEdge> g, Integer n) {
+	private static GGraph createHigherBlockGraph(GGraph g, Integer n) {
 		EdgeFactory<GVertex,GEdge> gEF = 
 				new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);
 		DirectedPseudograph<GVertex,GEdge> higherBlockG = 
@@ -412,7 +410,7 @@ public class TextileBuilder {
 				}
 			}
 		}
-		return higherBlockG;
+		return new GGraph(higherBlockG);
 	}
 	
 

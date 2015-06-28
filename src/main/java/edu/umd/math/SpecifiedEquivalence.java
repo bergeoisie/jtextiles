@@ -11,22 +11,22 @@ import edu.umd.math.GammaGraph.GammaGraphBuilder;
 
 public class SpecifiedEquivalence {
 
-	private DirectedPseudograph<GVertex,GEdge> g;
-	private DirectedPseudograph<GVertex,GEdge> h;
+	private GGraph g;
+	private GGraph h;
 	
 	List<EquivEntry> seArray;
 	
 	
 
-	public SpecifiedEquivalence(DirectedPseudograph<GVertex,GEdge> gGraph,
-								DirectedPseudograph<GVertex,GEdge> hGraph,
+	public SpecifiedEquivalence(GGraph gGraph,
+								GGraph hGraph,
 								List<EquivEntry> sm) {
 		g = gGraph;
 		h = hGraph;
 		seArray = sm;
 	}
 	
-	public SpecifiedEquivalence(SpecHelper sh, DirectedPseudograph<GVertex,GEdge> gg, DirectedPseudograph<GVertex,GEdge> hh) {
+	public SpecifiedEquivalence(SpecHelper sh, GGraph gg, GGraph hh) {
 		g = gg;
 		h = hh;
 		seArray = sh.getCurrentEntryList();

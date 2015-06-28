@@ -15,10 +15,10 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 public class SpecifiedEquivalenceGenerator {
 
-	private DirectedPseudograph<GVertex,GEdge> g;
-	private DirectedPseudograph<GVertex,GEdge> h;
-	private DirectedPseudograph<GVertex,GEdge> gh;
-	private DirectedPseudograph<GVertex,GEdge> hg;
+	private GGraph g;
+	private GGraph h;
+	private GGraph gh;
+	private GGraph hg;
 
 	private List<SpecifiedEquivalence> specEquivList;
 	
@@ -28,7 +28,7 @@ public class SpecifiedEquivalenceGenerator {
 	private static final Logger logger = LogManager.getLogger(SpecifiedEquivalenceGenerator.class.getName());
 
 	
-	public SpecifiedEquivalenceGenerator(DirectedPseudograph<GVertex,GEdge> gg, DirectedPseudograph<GVertex,GEdge> hh) {
+	public SpecifiedEquivalenceGenerator(GGraph gg, GGraph hh) {
 		g = gg;
 		h = hh;
 		gh = GraphBuilder.createProductGraph(gg, hh);

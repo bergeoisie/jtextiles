@@ -17,10 +17,10 @@ public class Textile {
 	
 	private GammaGraph gammaGraph;
 
-	private DirectedPseudograph<GVertex,GEdge> gGraph;
+	private GGraph gGraph;
 	
 	public Textile(GammaGraph gamma,
-			DirectedPseudograph<GVertex,GEdge> g) {
+			GGraph g) {
 		gammaGraph = gamma;
 		gGraph = g;
 	}
@@ -29,7 +29,7 @@ public class Textile {
 		return gammaGraph;
 	}
 	
-	public DirectedPseudograph<GVertex,GEdge> getGGraph() {
+	public GGraph getGGraph() {
 		return gGraph;
 	}
 	

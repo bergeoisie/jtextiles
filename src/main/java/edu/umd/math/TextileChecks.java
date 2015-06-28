@@ -35,7 +35,7 @@ public class TextileChecks {
 		Map<String,GEdge> edgeMap = new HashMap<String,GEdge>();
 
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GGraph g = t.getGGraph();
 
 		Set<GEdge> gEdges = g.edgeSet();
 		Set<GammaEdge> gammaEdges = gamma.edgeSet();
@@ -66,7 +66,7 @@ public class TextileChecks {
 	public static boolean isLR(Textile t) {
 
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GGraph g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
 
@@ -104,7 +104,7 @@ public class TextileChecks {
 
 	public static boolean isQLeftResolving(Textile t) {
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GGraph g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
 
@@ -129,7 +129,7 @@ public class TextileChecks {
 	public static boolean isQRightResolving(Textile t) {
 
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GGraph g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
 
@@ -156,7 +156,7 @@ public class TextileChecks {
 	public static boolean isPLeftResolving(Textile t) {
 
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GGraph g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
 
@@ -181,7 +181,7 @@ public class TextileChecks {
 	public static boolean isPRightResolving(Textile t) {
 
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GGraph g = t.getGGraph();
 
 		Set<GammaVertex> gammaVertices = gamma.vertexSet();
 
@@ -207,7 +207,7 @@ public class TextileChecks {
 
 	public static boolean isPRightDefinite(Textile t) {
 		
-	//	createRuleSetForTextile(t);
+		ProductionRuleMachine prm = createProductionRuleMachineForTextile(t);
 	//	initialPopulateMatrix(t);
 		
 	//	iterateThroughMatrixAndApplyRules();
@@ -219,6 +219,18 @@ public class TextileChecks {
 		return false;
 	}
 	
-	
+	private static ProductionRuleMachine createProductionRuleMachineForTextile(Textile t) {
+	    GammaGraph gamma = t.getGammaGraph();
+
+        ProductionRuleMachine prm = new ProductionRuleMachine();
+
+        for(GammaEdge e : gamma.edgeSet()) {
+            ProductionRule rule = new ProductionRule(gamma.getEdgeSource(e), gamma.getEdgeTarget(e));
+            prm.addRule(rule);
+        }
+
+        return prm;
+	}
+
 
 }

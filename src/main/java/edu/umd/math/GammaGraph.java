@@ -10,7 +10,7 @@ import org.jgrapht.graph.DirectedPseudograph;
 public class GammaGraph {
 	private DirectedPseudograph<GammaVertex, GammaEdge> gammaGraph;
 
-	private GammaGraph(DirectedPseudograph<GammaVertex, GammaEdge> gammaGraph) {
+	public GammaGraph(DirectedPseudograph<GammaVertex, GammaEdge> gammaGraph) {
 		this.gammaGraph = gammaGraph;
 	}
 	

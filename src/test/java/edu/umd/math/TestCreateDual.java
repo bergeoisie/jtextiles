@@ -13,7 +13,7 @@ public class TestCreateDual {
 		
 		Textile td = TextileBuilder.createDual(t);
 
-		DirectedPseudograph<GVertex,GEdge> tdG = td.getGGraph();
+		GGraph tdG = td.getGGraph();
 		GammaGraph tdGamma = td.getGammaGraph();
 			
 		org.junit.Assert.assertEquals("failure - g edgeset sizes not equal", 3, tdG.edgeSet().size());

@@ -10,24 +10,21 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 public class GraphBuilder {
 	
-	public static DirectedPseudograph<GVertex,GEdge> createProductGraph(DirectedPseudograph<GVertex,GEdge> g,
-			DirectedPseudograph<GVertex,GEdge> h) {
+	public static GGraph createProductGraph(GGraph g,
+			GGraph h) {
 		
 		Set<GVertex> gVertices = g.vertexSet();
 		Set<GVertex> hVertices = h.vertexSet();
-	
-		
-		EdgeFactory<GVertex,GEdge> gEF = 
-				new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);
-		DirectedPseudograph<GVertex,GEdge> prodG = 
-				new DirectedPseudograph<GVertex,GEdge>(gEF);
+
+
+		GGraph.GGraphBuilder prodGBuilder = new GGraph.GGraphBuilder();
 		
 		Map<String,GVertex> gVertexMap = new HashMap<String,GVertex>();
 		Map<String,GVertex> hVertexMap = new HashMap<String,GVertex>();
 		
 		
 		for(GVertex gVertex : gVertices) {
-			prodG.addVertex(gVertex);
+			prodGBuilder.addVertex(gVertex);
 			gVertexMap.put(gVertex.getName(), gVertex);
 		}
 		
@@ -44,13 +41,15 @@ public class GraphBuilder {
 					GEdge prodEdge = new GEdge(tGVertex.getName(),
 												tgvoeTargetVertex.getName(),
 												tGVertexOutEdge.getName() + tgvoeTargetVertexOutEdge.getName());
-					prodG.addEdge(gVertexMap.get(tGVertex.getName()),
+					prodGBuilder.addEdge(gVertexMap.get(tGVertex.getName()),
 									gVertexMap.get(tgvoeTargetVertex.getName()),
 									prodEdge);
 				}
 			}
 		}
-		
+
+		GGraph prodG = prodGBuilder.build();
+
 		return prodG;
 	}
 }

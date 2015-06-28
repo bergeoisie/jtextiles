@@ -10,16 +10,15 @@ public class TestTextileUtils {
 
 	public static Textile generateNasu() {
 		
-		EdgeFactory<GVertex,GEdge> gEF = new ClassBasedEdgeFactory<GVertex,GEdge>(GEdge.class);	
-		DirectedPseudograph<GVertex,GEdge> g = new DirectedPseudograph<GVertex,GEdge>(gEF);
-		
+
 		GammaGraphBuilder gammaBuilder = new GammaGraphBuilder();
-		
+		GGraph.GGraphBuilder gBuilder = new GGraph.GGraphBuilder();
+
 		GVertex gv1 = new GVertex("0");
 		GVertex gv2 = new GVertex("1");
 
-		g.addVertex(gv1);
-		g.addVertex(gv2);
+		gBuilder.addVertex(gv1);
+		gBuilder.addVertex(gv2);
 		
 		GEdge ge1 = new GEdge("0","0","a");
 		GEdge ge2 = new GEdge("0","0","b");
@@ -27,11 +26,11 @@ public class TestTextileUtils {
 		GEdge ge4 = new GEdge("1","0","d");
 		GEdge ge5 = new GEdge("1","1","e");
 		
-		g.addEdge(gv1, gv1, ge1);
-		g.addEdge(gv1, gv1, ge2);
-		g.addEdge(gv1, gv2, ge3);
-		g.addEdge(gv2, gv1, ge4);
-		g.addEdge(gv2, gv2, ge5);
+		gBuilder.addEdge(gv1, gv1, ge1);
+		gBuilder.addEdge(gv1, gv1, ge2);
+		gBuilder.addEdge(gv1, gv2, ge3);
+		gBuilder.addEdge(gv2, gv1, ge4);
+		gBuilder.addEdge(gv2, gv2, ge5);
 		
 		GammaVertex gammav1 = new GammaVertex(gv1,gv1,"u");
 		GammaVertex gammav2 = new GammaVertex(gv1,gv2,"v");
@@ -59,8 +58,10 @@ public class TestTextileUtils {
 		gammaBuilder.addEdge(gammav3, gammav2, gammae7);
 		gammaBuilder.addEdge(gammav3, gammav3, gammae8);
 		
+		GGraph g = gBuilder.build();
 		GammaGraph gamma = gammaBuilder.build();
-		
+
+
 		return new Textile(gamma,g);
 	}
 	

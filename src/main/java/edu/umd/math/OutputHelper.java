@@ -8,7 +8,7 @@ public class OutputHelper {
 
 	public static void printTextile(Textile t) {
 		GammaGraph gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GGraph g = t.getGGraph();
 		
 		
 		System.out.println("Printing Gamma Graph");
@@ -61,13 +61,13 @@ public class OutputHelper {
 		return str.toString();
 	}
 	
-	public static <V extends Vertex, E extends Edge> void printGraph(DirectedPseudograph<V,E> graph) {
-		Set<V> vertices = graph.vertexSet();
+	public static void printGraph(GGraph graph) {
+		Set<GVertex> vertices = graph.vertexSet();
 
-		for(V gammav : vertices) {
-			System.out.print(gammav.getName() + " ");
-			for(V igv : vertices) {
-				Set<E> edges = graph.getAllEdges(gammav, igv);
+		for(GVertex gv : vertices) {
+			System.out.print(gv.getName() + " ");
+			for(GVertex igv : vertices) {
+				Set<GEdge> edges = graph.getAllEdges(gv, igv);
 				String formattedEdges = formatEdges(edges);
 				System.out.print(formattedEdges);
 			}
