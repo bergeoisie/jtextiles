@@ -80,12 +80,17 @@ public class TestProductionRuleMachine {
 		ProductionRuleMachine prm = new ProductionRuleMachine(prodRuleSet);
 		
 		TypeSet typeSetOfOne = new TypeSet();
-		
+		TypeSet typeSetOfTwo = new TypeSet();
+
+		typeSetOfOne.addVertex(gammav1);
+        typeSetOfTwo.addVertex(gammav2);
+
+
 		TypeSet resultFromOne = prm.applyRules(typeSetOfOne);
+		TypeSet resultFromTwo = prm.applyRules(typeSetOfTwo);
 		
-		
-		Assert.assertEquals("failure - rule machine does not apply properly", resultFromOne.getSize(), 2);
-		
+		Assert.assertEquals("failure - rule machine does not apply properly", 2, resultFromOne.getSize());
+	    Assert.assertEquals("failure - rule machine does not apply if no applicable rules", 0, resultFromTwo.getSize());
 		
 	}
 	

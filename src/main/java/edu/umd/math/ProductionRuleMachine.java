@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ProductionRuleMachine {
 
-	private static final Logger logger = LogManager.getLogger(SpecifiedEquivalenceGenerator.class.getName());
+	private static final Logger logger = LogManager.getLogger(ProductionRuleMachine.class.getName());
 	
 	private Set<ProductionRule> rules;
 	

@@ -10,7 +10,7 @@ import com.google.common.base.Optional;
 
 public class TypeSet {
 
-	private static final Logger logger = LogManager.getLogger(SpecifiedEquivalenceGenerator.class.getName());
+	private static final Logger logger = LogManager.getLogger(TypeSet.class.getName());
 	
 	private Set<GammaVertex> vertexSet;
 	
@@ -33,6 +33,7 @@ public class TypeSet {
 	public TypeSet apply(ProductionRule rule) {
 		TypeSet result = new TypeSet();
 		for(GammaVertex v : vertexSet) {
+			logger.debug("Looking for applicable rules for vertex : " + v.toString());
 			Optional<GammaVertex> ruleResult = rule.applyRule(v);
 			if(ruleResult.isPresent()) {
 				logger.debug("We have applied " 

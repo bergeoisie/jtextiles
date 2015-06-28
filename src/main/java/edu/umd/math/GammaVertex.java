@@ -48,7 +48,7 @@ public class GammaVertex extends Vertex{
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof GEdge))
+		if (!(obj instanceof GammaVertex))
             return false;
         if (obj == this)
             return true;
@@ -68,5 +68,9 @@ public class GammaVertex extends Vertex{
 								.append(qv.getName())
 								.toHashCode();
 	}
-	
+
+	@Override
+    public String toString() {
+        return "GammaVertex: " + name + " p: " + pv.getName() + " q: " + qv.getName();
+    }
 }
