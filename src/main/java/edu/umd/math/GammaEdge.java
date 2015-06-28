@@ -1,5 +1,8 @@
 package edu.umd.math;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class GammaEdge extends Edge {
 	private static final long serialVersionUID = 6741324465266679631L;
 	
@@ -22,5 +25,32 @@ public class GammaEdge extends Edge {
 		pe = p;
 		qe = q;
 		name = n;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof GEdge))
+            return false;
+        if (obj == this)
+            return true;
+
+        GammaEdge rhs = (GammaEdge) obj;
+        return new EqualsBuilder().
+            append(name, rhs.name).
+            append(sName, rhs.sName).
+            append(tName, rhs.tName).
+            append(pe, rhs.pe).
+            append(qe, rhs.qe).
+            isEquals();
+    }
+	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17,31).append(name)
+								.append(sName)
+								.append(tName)
+								.append(pe)
+								.append(qe)
+								.toHashCode();
 	}
 }

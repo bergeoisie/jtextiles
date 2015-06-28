@@ -7,8 +7,8 @@ import org.jgrapht.graph.DirectedPseudograph;
 public class OutputHelper {
 
 	public static void printTextile(Textile t) {
-		DirectedPseudograph<GammaVertex,GammaEdge> gamma = t.getGammaGraph();
-		DirectedPseudograph<GVertex,GEdge> g = t.getGGraph();
+		GammaGraph gamma = t.getGammaGraph();
+		GGraph g = t.getGGraph();
 		
 		
 		System.out.println("Printing Gamma Graph");
@@ -61,13 +61,27 @@ public class OutputHelper {
 		return str.toString();
 	}
 	
-	public static <V extends Vertex, E extends Edge> void printGraph(DirectedPseudograph<V,E> graph) {
-		Set<V> vertices = graph.vertexSet();
+	public static void printGraph(GGraph graph) {
+		Set<GVertex> vertices = graph.vertexSet();
 
-		for(V gammav : vertices) {
+		for(GVertex gv : vertices) {
+			System.out.print(gv.getName() + " ");
+			for(GVertex igv : vertices) {
+				Set<GEdge> edges = graph.getAllEdges(gv, igv);
+				String formattedEdges = formatEdges(edges);
+				System.out.print(formattedEdges);
+			}
+			System.out.println("");
+		}
+	}
+
+	public static void printGraph(GammaGraph graph) {
+		Set<GammaVertex> vertices = graph.vertexSet();
+
+		for(GammaVertex gammav : vertices) {
 			System.out.print(gammav.getName() + " ");
-			for(V igv : vertices) {
-				Set<E> edges = graph.getAllEdges(gammav, igv);
+			for(GammaVertex igv : vertices) {
+				Set<GammaEdge> edges = graph.getAllEdges(gammav, igv);
 				String formattedEdges = formatEdges(edges);
 				System.out.print(formattedEdges);
 			}
@@ -75,7 +89,8 @@ public class OutputHelper {
 		}
 	}
 	
-	public static void printHomomorphisms(DirectedPseudograph<GammaVertex,GammaEdge> graph) {
+	
+	public static void printHomomorphisms(GammaGraph graph) {
 		Set<GammaVertex> gammaVertices = graph.vertexSet();
 
 		for(GammaVertex gammav : gammaVertices) {
@@ -88,4 +103,6 @@ public class OutputHelper {
 			System.out.println("");
 		}
 	}
+	
+
 }
