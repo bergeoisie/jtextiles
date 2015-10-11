@@ -1,5 +1,6 @@
 package edu.umd.math;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -441,8 +442,42 @@ public class TextileBuilder {
 		return sb.toString();
 	}
 	
-	public static Textile inducedRightResolvingP(Textile T) {
-		return T;
+	public static Textile inducedRightResolvingP(Textile textile) {
+
+		GammaGraph gammaGraph = textile.getGammaGraph();
+		GGraph gGraph = textile.getGGraph();
+
+		Set<CompatibleSet> seenSet = new HashSet<>();
+		Stack<CompatibleSet> toCheck = new Stack<>();
+
+		Codex codex = new Codex();
+
+		// Fill the seen set and the initial stack with the singleton vertex sets
+		for(GammaVertex gammaV : gammaGraph.vertexSet()) {
+			CompatibleSet compatibleSet = new CompatibleSet(gammaV);
+			seenSet.add(compatibleSet);
+			toCheck.push(compatibleSet);
+		}
+
+		// Create the codex of G Edges
+		for(GEdge gEdge : gGraph.edgeSet()) {
+			codex.addEntry(gEdge.getName());
+		}
+
+		while(!toCheck.empty()) {
+			CompatibleSet currentCompatSet = toCheck.pop();
+			for(String word : codex.getEntries()) {
+				CompatibleSet newCompatSet = CompatibleSet.buildSuccessorSet(textile, currentCompatSet, word);
+				logger.debug("Generated newCompatSet: " + newCompatSet.toString());
+				if(!seenSet.contains(newCompatSet)) {
+					seenSet.add(newCompatSet);
+					toCheck.add(newCompatSet);
+				}
+			}
+
+		}
+
+		return textile;
 	}
 	
 }
