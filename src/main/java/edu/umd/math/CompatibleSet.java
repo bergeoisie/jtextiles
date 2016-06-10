@@ -22,7 +22,7 @@ public class CompatibleSet {
     }
 
     public CompatibleSet(GammaVertex singletonVertex) {
-        this.vertexSet = new HashSet<>();
+        this.vertexSet = new HashSet<GammaVertex>();
         this.vertexSet.add(singletonVertex);
     }
 
