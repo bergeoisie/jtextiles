@@ -8,9 +8,7 @@ public class GEdge extends Edge {
 	private static final long serialVersionUID = -3345887409347580717L;
 
 	public GEdge(String s, String t, String n) {
-		sName = s;
-		tName = t;
-		name = n;
+		super(n,s,t);
 	}
 	
 	@Override
@@ -22,17 +20,17 @@ public class GEdge extends Edge {
 
         GEdge rhs = (GEdge) obj;
         return new EqualsBuilder().
-            append(name, rhs.name).
-            append(sName, rhs.sName).
-            append(tName, rhs.tName).
+            append(this.getName(), rhs.getName()).
+            append(this.getSourceName(), rhs.getSourceName()).
+            append(this.getTargetName(), rhs.getTargetName()).
             isEquals();
     }
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17,31).append(name)
-								.append(sName)
-								.append(tName)
+		return new HashCodeBuilder(17,31).append(this.getName())
+								.append(this.getSourceName())
+								.append(this.getTargetName())
 								.toHashCode();
 	}
 	

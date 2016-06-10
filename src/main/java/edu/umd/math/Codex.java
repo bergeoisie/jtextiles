@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Codex {
 
-	ArrayList<String> entries;
+	private ArrayList<String> entries;
 	
 	public Codex() {
 		entries = new ArrayList<String>();
@@ -12,5 +12,9 @@ public class Codex {
 	
 	public void addEntry(String s) {
 		entries.add(s);
+	}
+
+	public ArrayList<String> getEntries() {
+		return entries;
 	}
 }

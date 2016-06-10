@@ -6,8 +6,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class GammaEdge extends Edge {
 	private static final long serialVersionUID = 6741324465266679631L;
 	
-	private String pe;
-	private String qe;
+	private final String pe;
+	private final String qe;
 	
 
 	
@@ -20,8 +20,7 @@ public class GammaEdge extends Edge {
 	}
 	
 	public GammaEdge(String s, String t, String p, String q, String n) {
-		sName = s;
-		tName = t;
+		super(n,s,t);
 		pe = p;
 		qe = q;
 		name = n;
@@ -37,8 +36,8 @@ public class GammaEdge extends Edge {
         GammaEdge rhs = (GammaEdge) obj;
         return new EqualsBuilder().
             append(name, rhs.name).
-            append(sName, rhs.sName).
-            append(tName, rhs.tName).
+            append(this.getSourceName(), rhs.getSourceName()).
+            append(this.getTargetName(), rhs.getTargetName()).
             append(pe, rhs.pe).
             append(qe, rhs.qe).
             isEquals();
@@ -47,8 +46,8 @@ public class GammaEdge extends Edge {
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder(17,31).append(name)
-								.append(sName)
-								.append(tName)
+								.append(this.getSourceName())
+								.append(this.getTargetName())
 								.append(pe)
 								.append(qe)
 								.toHashCode();

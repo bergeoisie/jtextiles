@@ -1,11 +1,12 @@
 package edu.umd.math;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.lang.reflect.Type;
+import java.util.*;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.cycle.SzwarcfiterLauerSimpleCycles;
 import org.jgrapht.graph.DirectedPseudograph;
 
 public class TextileChecks {
@@ -208,15 +209,15 @@ public class TextileChecks {
 	public static boolean isPRightDefinite(Textile t) {
 		
 		ProductionRuleMachine prm = createProductionRuleMachineForTextile(t);
-	//	initialPopulateMatrix(t);
+		Multimap<Integer, TypeSet> matrix = initializeMatrix(t, x -> x.getPVHom());
 		
-	//	iterateThroughMatrixAndApplyRules();
+		DirectedPseudograph<TypeSet,Edge> graph = generateGraphFromHighestLevel(prm, matrix);
 		
-		
-		
-		
-		
-		return false;
+		// Check for cycles
+		SzwarcfiterLauerSimpleCycles<TypeSet,Edge> simpleCycleFinder = new SzwarcfiterLauerSimpleCycles<>(graph);
+		List<List<TypeSet> > cycles= simpleCycleFinder.findSimpleCycles();
+
+		return cycles.size() > 0;
 	}
 	
 	private static ProductionRuleMachine createProductionRuleMachineForTextile(Textile t) {
@@ -232,5 +233,48 @@ public class TextileChecks {
         return prm;
 	}
 
+	private static Multimap<Integer,TypeSet> initializeMatrix(Textile t, HomomorphismFunction homFunction) {
 
+		Multimap<Integer, TypeSet> matrix =  ArrayListMultimap.create();
+
+		for(GVertex g : t.getGGraph().vertexSet()) {
+			TypeSet typeSet = new TypeSet();
+
+			for(GammaVertex gamma : t.getGammaGraph().vertexSet()) {
+				if(homFunction.getVHom(gamma).equals(g)) {
+					typeSet.addVertex(gamma);
+				}
+			}
+
+			matrix.put(typeSet.getSize(), typeSet);
+		}
+
+		return matrix;
+	}
+
+	private static DirectedPseudograph<TypeSet,Edge> generateGraphFromHighestLevel(ProductionRuleMachine prm,
+																				   Multimap<Integer,TypeSet> matrix) {
+		DirectedPseudograph<TypeSet,Edge> graph = new DirectedPseudograph<TypeSet, Edge>(Edge.class);
+
+		Integer maximumM = Collections.max(matrix.keySet());
+		Collection<TypeSet> listOfMaximalTypeSets = matrix.get(maximumM);
+
+		for(TypeSet maximalTypeSet : listOfMaximalTypeSets) {
+			graph.addVertex(maximalTypeSet);
+		}
+
+		for(TypeSet maximalTypeSet : listOfMaximalTypeSets) {
+
+			TypeSet afterApplication = prm.applyRules(maximalTypeSet);
+			if(afterApplication.getSize() == maximumM && listOfMaximalTypeSets.contains(afterApplication)) {
+				graph.addEdge(maximalTypeSet, afterApplication);
+			}
+		}
+
+		return graph;
+	}
+
+	private interface HomomorphismFunction {
+		GVertex getVHom(GammaVertex gammaVertex);
+	}
 }
