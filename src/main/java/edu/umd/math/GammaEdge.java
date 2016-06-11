@@ -23,7 +23,6 @@ public class GammaEdge extends Edge {
 		super(n,s,t);
 		pe = p;
 		qe = q;
-		name = n;
 	}
 	
 	@Override
@@ -35,7 +34,7 @@ public class GammaEdge extends Edge {
 
         GammaEdge rhs = (GammaEdge) obj;
         return new EqualsBuilder().
-            append(name, rhs.name).
+            append(this.getName(), rhs.getName()).
             append(this.getSourceName(), rhs.getSourceName()).
             append(this.getTargetName(), rhs.getTargetName()).
             append(pe, rhs.pe).
@@ -45,7 +44,7 @@ public class GammaEdge extends Edge {
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17,31).append(name)
+		return new HashCodeBuilder(17,31).append(this.getName())
 								.append(this.getSourceName())
 								.append(this.getTargetName())
 								.append(pe)

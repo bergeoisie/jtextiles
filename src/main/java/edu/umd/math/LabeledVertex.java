@@ -2,8 +2,7 @@ package edu.umd.math;
 
 public class LabeledVertex extends Vertex {
 	private GVertex lv;
-	
-	
+
 	public String getHomName() {
 		return lv.getName();
 	}
@@ -14,18 +13,8 @@ public class LabeledVertex extends Vertex {
 	
 	
 	public LabeledVertex(GVertex l, String n) {
-		lv = l;
-		name = n;
-	}
-	
-	public LabeledVertex(String n) {
-		lv = null;
-		name = n;
-	}
-	
-	protected void setVHom(GVertex l) {
+		super(n);
 		lv = l;
 	}
 	
-
 }

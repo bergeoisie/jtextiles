@@ -3,7 +3,7 @@ package edu.umd.math;
 import java.util.List;
 
 public abstract class Vertex {
-	protected String name;
+	private final String name;
 	
 	public String getName() {
 		return name;
@@ -17,7 +17,7 @@ public abstract class Vertex {
 		name = sb.toString();
 	}
 	
-	public Vertex() {
-		name = "";
+	public Vertex(String name) {
+		this.name = name;
 	}
 }

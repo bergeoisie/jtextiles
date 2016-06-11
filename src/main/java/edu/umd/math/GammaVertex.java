@@ -6,8 +6,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class GammaVertex extends Vertex{
 
-	private GVertex pv;
-	private GVertex qv;
+	private final GVertex pv;
+	private final GVertex qv;
 	
 	
 	public String getPVHomName() {
@@ -27,22 +27,8 @@ public class GammaVertex extends Vertex{
 	}
 	
 	public GammaVertex(GVertex p, GVertex q, String n) {
+		super(n);
 		pv = p;
-		qv = q;
-		name = n;
-	}
-	
-	public GammaVertex(String n) {
-		pv = null;
-		qv = null;
-		name = n;
-	}
-	
-	protected void setPVHom(GVertex p) {
-		pv = p;
-	}
-	
-	protected void setQVHom(GVertex q) {
 		qv = q;
 	}
 	
@@ -55,7 +41,7 @@ public class GammaVertex extends Vertex{
 
         GammaVertex rhs = (GammaVertex) obj;
         return new EqualsBuilder().
-            append(name, rhs.name).
+            append(this.getName(), rhs.getName()).
             append(pv.getName(), rhs.pv.getName()).
             append(qv.getName(), rhs.qv.getName()).
             isEquals();
@@ -63,7 +49,7 @@ public class GammaVertex extends Vertex{
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(19,39).append(name)
+		return new HashCodeBuilder(19,39).append(this.getName())
 								.append(pv.getName())
 								.append(qv.getName())
 								.toHashCode();
@@ -71,6 +57,6 @@ public class GammaVertex extends Vertex{
 
 	@Override
     public String toString() {
-        return "GammaVertex: " + name + " p: " + pv.getName() + " q: " + qv.getName();
+        return "GammaVertex: " + this.getName() + " p: " + pv.getName() + " q: " + qv.getName();
     }
 }
