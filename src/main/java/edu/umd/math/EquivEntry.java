@@ -12,7 +12,11 @@ public class EquivEntry {
 	private GEdge b;
 	private GEdge aprime;
 	private GEdge bprime;
-	
+
+
+	/*
+	 * ab' in A_GH, k(ab')=ba' in A_HG
+	 */
 	public EquivEntry(GEdge aa, GEdge bb, GEdge aaprime, GEdge bbprime) {
 		a = aa;
 		b = bb;

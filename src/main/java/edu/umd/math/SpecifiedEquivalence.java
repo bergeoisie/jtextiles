@@ -60,7 +60,7 @@ public class SpecifiedEquivalence {
 	}
 
 	private GammaVertex createGammaVertexFromEquivEntry(EquivEntry ee) {
-        return GammaVertex gv = new GammaVertex(g.getEdgeSource(ee.getA()),
+        return new GammaVertex(g.getEdgeSource(ee.getA()),
                 g.getEdgeSource(ee.getAPrime()),
                 ee.getB().getTargetName());
     }
