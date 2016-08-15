@@ -11,7 +11,7 @@ public class GVertex extends Vertex {
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof GEdge))
+		if (!(obj instanceof GVertex))
             return false;
         if (obj == this)
             return true;

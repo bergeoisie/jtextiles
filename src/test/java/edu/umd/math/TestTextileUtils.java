@@ -133,6 +133,10 @@ public class TestTextileUtils {
         GEdge ge2 = new GEdge("0","1","v");
         GEdge ge3 = new GEdge("1","0","w");
 
+		gBuilder.addEdge(gv1,gv1,ge1);
+		gBuilder.addEdge(gv1,gv2,ge2);
+		gBuilder.addEdge(gv2,gv1,ge3);
+
         return gBuilder.build();
     }
 
@@ -148,6 +152,10 @@ public class TestTextileUtils {
         GEdge ge1 = new GEdge("0","0","x");
         GEdge ge2 = new GEdge("0","1","y");
         GEdge ge3 = new GEdge("1","0","z");
+
+		gBuilder.addEdge(gv1,gv1,ge1);
+		gBuilder.addEdge(gv1,gv2,ge2);
+		gBuilder.addEdge(gv2,gv1,ge3);
 
         return gBuilder.build();
     }
