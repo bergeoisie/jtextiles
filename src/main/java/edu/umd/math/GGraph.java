@@ -4,17 +4,21 @@ import org.jgrapht.EdgeFactory;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DirectedPseudograph;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by brberg on 6/28/15.
  */
 public class GGraph implements Cloneable {
     private DirectedPseudograph<GVertex, GEdge> gGraph;
+    private Map<String,GVertex> vertexMap;
 
     public GGraph(DirectedPseudograph<GVertex, GEdge> gGraph) {
         this.gGraph = gGraph;
+        vertexMap = new HashMap<>();
+        for(GVertex gVertex : gGraph.vertexSet()) {
+            vertexMap.put(gVertex.getName(),gVertex);
+        }
     }
 
     public int inDegreeOf(GVertex v) {
@@ -85,6 +89,14 @@ public class GGraph implements Cloneable {
 
     public GVertex getEdgeSource(GEdge edge) {
         return gGraph.getEdgeSource(edge);
+    }
+
+    public GEdge getEdge(GVertex source, GVertex target) {
+        return gGraph.getEdge(source, target);
+    }
+
+    public Optional<GVertex> getVertexByName(String name) {
+        return Optional.ofNullable(vertexMap.get(name));
     }
 
 

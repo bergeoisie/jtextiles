@@ -4,17 +4,20 @@ import java.util.*;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import org.jgrapht.graph.DirectedPseudograph;
 
 import edu.umd.math.GammaGraph.GammaGraphBuilder;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class SpecifiedEquivalence {
 
 	private GGraph g;
 	private GGraph h;
 
-	List<EquivEntry> seArray;
-	
+	private List<EquivEntry> seArray;
+
+    private static final Logger logger = LogManager.getLogger(SpecifiedEquivalence.class);
+
 	public SpecifiedEquivalence(GGraph gGraph,
 								GGraph hGraph,
 								List<EquivEntry> sm) {
@@ -33,17 +36,17 @@ public class SpecifiedEquivalence {
 						
 		GammaGraphBuilder textileGammaBuilder = new GammaGraphBuilder();
 		
-		Map<String,GammaVertex> textileGammaMap = new HashMap<String,GammaVertex>();
+		Map<String,GammaVertex> textileGammaMap = new HashMap<>();
 
-		Set<GEdge> hEdges = h.edgeSet();
 		Multimap<String,EquivEntry> orphanedTargetVertices = ArrayListMultimap.create();
 
 		for(EquivEntry ee : seArray) {
+            logger.error("Creating gamma vertex for " + ee.toString());
 			GammaVertex s = createGammaVertexFromEquivEntry(ee);
             if(!textileGammaMap.containsKey(s.getName())) {
                 textileGammaBuilder.addVertex(s);
                 textileGammaMap.put(s.getName(),s);
-                buildOrphanLinks(s,ee,textileGammaMap,orphanedTargetVertices,textileGammaBuilder);
+                buildOrphanLinks(s,textileGammaMap,orphanedTargetVertices,textileGammaBuilder);
             }
 
             if(textileGammaMap.containsKey(ee.getBPrime().getName())) {
@@ -61,15 +64,12 @@ public class SpecifiedEquivalence {
 	}
 
 	private GammaVertex createGammaVertexFromEquivEntry(EquivEntry ee) {
-        GammaVertex gv = new GammaVertex(g.getEdgeSource(ee.getA()),
+        return new GammaVertex(g.getEdgeSource(ee.getA()),
                 g.getEdgeSource(ee.getAPrime()),
                 ee.getB().getTargetName());
-
-        return gv;
     }
 
     private void buildOrphanLinks(GammaVertex vertex,
-                                  EquivEntry equivEntry,
                                   Map<String,GammaVertex> textileGammaMap,
                                   Multimap<String, EquivEntry> orphanedTargetVertices,
                                   GammaGraphBuilder textileGammaBuilder) {

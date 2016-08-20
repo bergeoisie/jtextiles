@@ -119,5 +119,45 @@ public class TestTextileUtils {
 
 		return new Textile(gamma,g);
 	}
-	
+
+	public static GGraph createUVWGraph() {
+        GGraph.GGraphBuilder gBuilder = new GGraph.GGraphBuilder();
+
+        GVertex gv1 = new GVertex("0");
+        GVertex gv2 = new GVertex("1");
+
+        gBuilder.addVertex(gv1);
+        gBuilder.addVertex(gv2);
+
+        GEdge ge1 = new GEdge("0","0","u");
+        GEdge ge2 = new GEdge("0","1","v");
+        GEdge ge3 = new GEdge("1","0","w");
+
+		gBuilder.addEdge(gv1,gv1,ge1);
+		gBuilder.addEdge(gv1,gv2,ge2);
+		gBuilder.addEdge(gv2,gv1,ge3);
+
+        return gBuilder.build();
+    }
+
+    public static GGraph createXYZGraph() {
+        GGraph.GGraphBuilder gBuilder = new GGraph.GGraphBuilder();
+
+        GVertex gv1 = new GVertex("0");
+        GVertex gv2 = new GVertex("1");
+
+        gBuilder.addVertex(gv1);
+        gBuilder.addVertex(gv2);
+
+        GEdge ge1 = new GEdge("0","0","x");
+        GEdge ge2 = new GEdge("0","1","y");
+        GEdge ge3 = new GEdge("1","0","z");
+
+		gBuilder.addEdge(gv1,gv1,ge1);
+		gBuilder.addEdge(gv1,gv2,ge2);
+		gBuilder.addEdge(gv2,gv1,ge3);
+
+        return gBuilder.build();
+    }
+
 }
