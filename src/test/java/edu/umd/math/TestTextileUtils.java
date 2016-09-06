@@ -40,9 +40,9 @@ public class TestTextileUtils {
 		gammaBuilder.addVertex(gammav2);
 		gammaBuilder.addVertex(gammav3);
 		
-		GammaEdge gammae1 = new GammaEdge("u","u","a","a","A");
+		GammaEdge gammae1 = new GammaEdge("u","u","a","b","A");
 		GammaEdge gammae2 = new GammaEdge("u","v","a","c","B");
-		GammaEdge gammae3 = new GammaEdge("u","w","c","b","C");
+		GammaEdge gammae3 = new GammaEdge("u","w","c","a","C");
 		GammaEdge gammae4 = new GammaEdge("v","u","b","d","D");
 		GammaEdge gammae5 = new GammaEdge("v","v","b","e","E");
 		GammaEdge gammae6 = new GammaEdge("w","u","d","b","F");

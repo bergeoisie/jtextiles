@@ -13,6 +13,8 @@ public class TestDefiniteChecks {
         Textile nasu = TestTextileUtils.generateNasu();
         Textile nasuTNaught = TestTextileUtils.generateNasuTNaught();
 
+
+
         //Assert.assertFalse(TextileChecks.);
     }
 }
